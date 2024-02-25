@@ -16,13 +16,13 @@ function PlayerHand() {
   </div>;
 }
 
- function Card({ title }: { title: string }) {
+function Card({ title }: { title: string }) {
   return <div className="w-24 h-36 bg-white rounded-md shadow-md hover:border-2 hover:border-blue-500 hover:scale-125">
     <h3>{title}</h3>
   </div>;
 }
 
- function PlayerAvatar() {
+function PlayerAvatar() {
   return <div className="w-24 h-24 bg-white rounded-full shadow-md"></div>;
 }
 
