@@ -16,8 +16,9 @@ model Card {
 
 model Player {
   id        String      @id @default(cuid())
-  health    Int
-  maxHealth Int
+  health    Int         @default(10)
+  maxHealth Int         @default(10)
+  block     Int         @default(0)
   deck      Deck?       @relation()
   Encounter Encounter[]
 }

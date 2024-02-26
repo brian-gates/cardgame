@@ -1,6 +1,6 @@
+import { cardsById, isCardId } from "./lib/cards";
 import prisma from "./lib/prisma";
 import { Card } from "@prisma/client";
-import { Providers } from "./lib/providers";
 
 export default function Board() {
   return (
@@ -20,35 +20,14 @@ async function PlayerHand() {
     take: 4,
   });
 
-  async function playCard(formData: FormData) {
-    "use server";
-    console.log("play card", formData);
-  }
   return (
-    <form action={playCard} className="flex flex-row gap-1">
+    <div className="flex flex-row gap-3">
       {cards.map((card) => {
-        return <Card {...card} />;
+        if (!isCardId(card.id)) return null;
+        const CardComponent = cardsById[card.id];
+        return <CardComponent key={card.id} />;
       })}
-    </form>
-  );
-}
-
-function Card({ title, id }: Card) {
-  return (
-    <button
-      name="action"
-      value={id}
-      type="submit"
-      className="w-36 h-56 bg-slate-100 rounded-md shadow-md border-2 hover:border-2 hover:scale-125 transition cursor-pointer flex flex-col"
-    >
-      <h4 className="text-lg font-bold text-center border-b w-full">{title}</h4>
-      <div className="p-1 grow gap-1 flex flex-col">
-        <div className="h-20 w-full bg-slate-300 self-center rounded-sm shadow-inner"></div>
-        <p className="text-sm p-2 text-left shadow-inner rounded-sm h-fit border-2 border-green-300 grow">
-          Description goes here.
-        </p>
-      </div>
-    </button>
+    </div>
   );
 }
 
@@ -64,10 +43,13 @@ async function PlayerAvatar() {
   );
 }
 
-function EnemyAvatar() {
+async function EnemyAvatar() {
+  const enemy = await prisma.enemy.findFirst();
+  if (!enemy) return null;
+
   return (
     <div className="flex flex-col gap-1">
-      <Stats health={10} maxHealth={10} />
+      <Stats health={enemy.health} maxHealth={enemy.maxHealth} />
     </div>
   );
 }
