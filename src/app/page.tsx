@@ -1,16 +1,12 @@
 import { getServerSession } from "next-auth";
 import { cardsById } from "./lib/cards";
 import prisma from "./lib/prisma";
-import { CardId } from "@prisma/client";
-import { revalidatePath } from "next/cache";
 import { enemyDetailsById } from "./lib/enemies";
 import { IoShieldSharp } from "react-icons/io5";
 import { endTurn } from "./lib/actions/endTurn";
 import { AdminPanel } from "./lib/AdminPanel";
-import { startEncounter } from "./lib/actions/startEncounter";
-import { leaveEncounter } from "./lib/actions/leaveEncounter";
-import { RxExit } from "react-icons/rx";
-import { LuSwords } from "react-icons/lu";
+import { GiCardDraw, GiHealthNormal } from "react-icons/gi";
+import { PlayerHand } from "./lib/PlayerHand";
 
 export default async function App() {
   const session = await getServerSession();
@@ -34,17 +30,17 @@ export default async function App() {
 
 export function Board() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24 bg-violet-100 text-slate-800">
+    <main className="flex min-h-screen flex-col items-center justify-between bg-violet-100 text-slate-800 max-w-full p-10">
       <div className="flex flex-col gap-4">
         <PlayerAvatar />
         <EnemyAvatar />
         <EndTurn />
-        <PlayerHand />
-        <DrawPile />
-        <DiscardPile />
         {/* <Deck /> */}
-        <AdminPanel />
       </div>
+      <PlayerHand />
+      <DrawPile />
+      <DiscardPile />
+      <AdminPanel />
     </main>
   );
 }
@@ -60,14 +56,21 @@ async function DiscardPile() {
     },
   });
   return (
-    <div>
-      <h2 className="text-2xl font-bold">
-        Discard Pile ({discardPile.length} Cards)
+    <div className="group absolute bottom-0 right-0 p-4 flex-col-reverse flex gap-3">
+      <h2 className="text-2xl font-bold text-right">
+        Discard{" "}
+        <span className="text-slate-400 text-sm">{discardPile.length}</span>
       </h2>
-      <div className="flex flex-row gap-1">
-        {discardPile.map((card) => {
+      <div className="flex flex-row gap-2 transition-transform -space-x-36 group-hover:space-x-0">
+        {discardPile.map((card, i) => {
           const CardComponent = cardsById[card.cardId];
-          return <CardComponent key={card.id} card={card} />;
+          return (
+            <div
+              className={`w-36 h-56 transition-transform rotate-[${i * 4}deg]`}
+            >
+              <CardComponent key={card.id} card={card} />
+            </div>
+          );
         })}
       </div>
     </div>
@@ -85,65 +88,27 @@ async function DrawPile() {
     },
   });
   return (
-    <div>
+    <div className="group absolute bottom-0 left-0 p-4 flex-col-reverse flex gap-3">
       <h2 className="text-2xl font-bold">
-        Draw Pile ({drawPile.length} Cards)
+        Draw <span className="text-slate-400 text-sm">{drawPile.length}</span>
       </h2>
-      <div className="flex flex-row gap-1">
-        {drawPile.map((card) => {
-          const CardComponent = cardsById[card.cardId];
-          return <CardComponent key={card.id} card={card} />;
-        })}
-      </div>
+      <form action={endTurn}>
+        <button
+          type="submit"
+          className="flex flex-row -space-x-32 min-w-36 min-h-56 border-2 border-slate-400 hover:border-blue-500 p-3"
+        >
+          {drawPile.map((card) => (
+            <CardBack key={card.id} />
+          ))}
+        </button>
+      </form>
     </div>
   );
 }
 
-async function Deck() {
-  const session = await getServerSession();
-  const id = session?.user?.email;
-  if (!id) return null;
-
-  const deck = await prisma.card.findMany({
-    where: {
-      ownerId: id,
-    },
-  });
+function CardBack() {
   return (
-    <div>
-      <h2 className="text-2xl font-bold">Deck ({deck.length} Cards)</h2>
-      <div className="flex flex-row gap-1">
-        {deck.map((card) => {
-          const CardComponent = cardsById[card.cardId];
-          return <CardComponent key={card.id} card={card} />;
-        })}
-      </div>
-    </div>
-  );
-}
-
-async function PlayerHand() {
-  const session = await getServerSession();
-  const id = session?.user?.email;
-  if (!id) return null;
-
-  const hand = await prisma.card.findMany({
-    where: {
-      ownerId: id,
-      location: "hand",
-    },
-  });
-
-  return (
-    <div>
-      <h2 className="text-2xl font-bold">Hand ({hand.length} Cards) </h2>
-      <div className="flex flex-row gap-3">
-        {hand.map((card) => {
-          const CardComponent = cardsById[card.cardId];
-          return <CardComponent key={card.id} card={card} />;
-        })}
-      </div>
-    </div>
+    <div className="w-36 h-56 bg-slate-100 rounded-md shadow-md border-2 cursor-pointer flex flex-col items-center justify-center"></div>
   );
 }
 
@@ -205,8 +170,11 @@ function Stats({
   return (
     <div className="flex flex-row gap-1">
       <div className="flex flex-col gap-1">
-        <div className="text-xs">
-          {health} / {maxHealth} ({percentHealth}%)
+        <div className="text-xs flex flex-row items-center gap-1">
+          <GiHealthNormal />
+          <div>
+            {health} / {maxHealth} ({percentHealth}%)
+          </div>
         </div>
 
         <div className="w-36 h-4 bg-gradient-to-b to-red-400 from-red-700 rounded-md overflow-hidden flex flex-row">
@@ -234,7 +202,12 @@ async function EndTurn() {
   if (!encounter) return null;
   return (
     <form action={endTurn}>
-      <button type="submit">End Turn</button>
+      <button
+        type="submit"
+        className="bg-slate-800 text-slate-100 p-3 rounded-md shadow-md flex flex-row items-center gap-2"
+      >
+        <GiCardDraw /> End Turn
+      </button>
     </form>
   );
 }

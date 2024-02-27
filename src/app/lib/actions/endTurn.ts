@@ -1,10 +1,12 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { drawCard } from "./drawCard";
+import { draw } from "./draw";
 import { enemyTurn } from "./enemyTurn";
+import { discardHand } from "./discardHand";
 
 export async function endTurn() {
-  await drawCard(5);
+  await discardHand();
+  await draw(7);
   await enemyTurn();
   revalidatePath("/");
 }

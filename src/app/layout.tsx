@@ -19,7 +19,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Providers>
-        <body className={inter.className}>
+        <body
+          className={
+            inter.className +
+            " bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 h-screen w-screen overflow-hidden min-h-[800px] min-w-[800px]"
+          }
+        >
           <LoginButton />
           {children}
         </body>

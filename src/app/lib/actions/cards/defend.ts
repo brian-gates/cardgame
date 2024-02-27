@@ -4,6 +4,6 @@ import { discard } from "../discard";
 import { gainArmor } from "../gainArmor";
 
 export async function defend(card: Card) {
-  await gainArmor(5);
+  await gainArmor(1);
   await discard(card.id);
 }

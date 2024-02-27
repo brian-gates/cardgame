@@ -2,8 +2,7 @@
 
 import { Card } from "@prisma/client";
 import { cardTitlesById } from ".";
-import { ReactNode } from "react";
-import { motion } from "framer-motion";
+import { ReactNode, useState } from "react";
 
 export function Card({
   card,
@@ -11,21 +10,19 @@ export function Card({
   children,
 }: {
   card: Card;
-  execute: (card: Card) => void;
+  execute: (card: Card) => Promise<void>;
   children: ReactNode;
 }) {
+  const [isPlaying, setIsPlaying] = useState(false);
   const title = cardTitlesById[card.cardId];
   return (
-    <motion.button
-      onClick={() => execute(card)}
-      layoutId={card.id}
-      whileHover={{
-        scale: 2,
-        transition: { duration: 0.5 },
+    <button
+      onClick={async () => {
+        setIsPlaying(true);
+        await execute(card);
+        setIsPlaying(false);
       }}
-      drag
-      dragConstraints={{ top: 10, left: 10, right: 10, bottom: 10 }}
-      className="w-36 h-56 bg-slate-100 rounded-md shadow-md border-2 cursor-pointer flex flex-col"
+      className="w-36 h-56 bg-slate-100 rounded-md border-2 cursor-pointer flex flex-col"
     >
       <h4 className="text-lg font-bold text-center border-b w-full">{title}</h4>
       <div className="p-1 grow gap-1 flex flex-col">
@@ -34,6 +31,6 @@ export function Card({
           {children}
         </p>
       </div>
-    </motion.button>
+    </button>
   );
 }

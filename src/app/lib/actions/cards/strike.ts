@@ -4,6 +4,6 @@ import { discard } from "../discard";
 import { damageEnemy } from "../damageEnemy";
 
 export async function strike(card: Card) {
-  await damageEnemy(6);
+  await damageEnemy(1);
   await discard(card.id);
 }

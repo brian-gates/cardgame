@@ -9,17 +9,17 @@ import { RxExit, RxReset } from "react-icons/rx";
 import { leaveEncounter } from "./actions/leaveEncounter";
 import { getSessionPlayer } from "./actions/getSessionPlayer";
 import { setPlayerHealth } from "./actions/setPlayerHealth";
-import { GiCardDraw } from "react-icons/gi";
+import { GiCardDraw, GiHealthNormal } from "react-icons/gi";
 import { resetToStarterDeck } from "./actions/resetToStarterDeck";
 
 export function AdminPanel() {
   return (
-    <div className="border-2 border-slate-300 p-4 rounded-md">
+    <div className="border-2 border-slate-300 p-4 rounded-md absolute left-0 ml-4">
       <h3 className="text-xl font-bold">Admin</h3>
       {cardIds.map((cardId) => (
         <AddCard key={cardId} cardId={cardId as CardId} />
       ))}
-      <StartEncounter />
+      <NewEncounter />
       <LeaveEncounter />
       <Shuffle />
       <Health />
@@ -51,8 +51,10 @@ async function Health() {
   }
 
   return (
-    <div className="flex gap-2">
-      <div>Health</div>
+    <div className="flex gap-2 items-center">
+      <div className="flex items-center gap-1">
+        <GiHealthNormal /> Health
+      </div>
       <form action={update}>
         <input
           className="w-14 text-center"
@@ -75,12 +77,12 @@ function Shuffle() {
     </form>
   );
 }
-function StartEncounter() {
+function NewEncounter() {
   return (
     <form action={startEncounter}>
       <button type="submit" className="flex items-center gap-1">
         <LuSwords />
-        Start Encounter
+        New Encounter
       </button>
     </form>
   );
