@@ -10,12 +10,12 @@ export function Card({
   children,
 }: {
   card: Card;
-  execute: () => void;
+  execute: (card: Card) => void;
   children: ReactNode;
 }) {
   const title = cardTitlesById[card.cardId];
   return (
-    <form action={execute}>
+    <form action={() => execute(card)}>
       <motion.button
         type="submit"
         className="w-36 h-56 bg-slate-100 rounded-md shadow-md border-2 hover:border-2 hover:scale-125 transition cursor-pointer flex flex-col"
