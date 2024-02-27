@@ -42,7 +42,7 @@ export function Board() {
         <PlayerHand />
         <DrawPile />
         <DiscardPile />
-        <Deck />
+        {/* <Deck /> */}
         <AdminPanel />
       </div>
     </main>

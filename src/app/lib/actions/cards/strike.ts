@@ -3,7 +3,7 @@ import { Card } from "@prisma/client";
 import { discard } from "../discard";
 import { damageEnemy } from "../damageEnemy";
 
-export async function strike({ card }: { card: Card }) {
+export async function strike(card: Card) {
   await damageEnemy(6);
   await discard(card.id);
 }

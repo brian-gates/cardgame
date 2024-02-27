@@ -4,7 +4,7 @@ import { bash } from "../actions/cards/bash";
 
 export function Bash({ card }: CardProps) {
   return (
-    <Card card={card} execute={() => bash({ card })}>
+    <Card card={card} execute={bash}>
       Deal 4 damage. Apply vulnerable.
     </Card>
   );

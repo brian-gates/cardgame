@@ -1,12 +1,16 @@
-import { cardIds } from "./cards";
+import { cardIds, cardTitlesById } from "./cards";
 import { CardId } from "@prisma/client";
 import { shuffle } from "./actions/shuffle";
 import { LuShuffle, LuSwords } from "react-icons/lu";
 import { startEncounter } from "./actions/startEncounter";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
-import { RxExit } from "react-icons/rx";
+import { RxExit, RxReset } from "react-icons/rx";
 import { leaveEncounter } from "./actions/leaveEncounter";
+import { getSessionPlayer } from "./actions/getSessionPlayer";
+import { setPlayerHealth } from "./actions/setPlayerHealth";
+import { GiCardDraw } from "react-icons/gi";
+import { resetToStarterDeck } from "./actions/resetToStarterDeck";
 
 export function AdminPanel() {
   return (
@@ -18,6 +22,46 @@ export function AdminPanel() {
       <StartEncounter />
       <LeaveEncounter />
       <Shuffle />
+      <Health />
+      <ResetToStarterDeck />
+    </div>
+  );
+}
+
+async function ResetToStarterDeck() {
+  return (
+    <form action={resetToStarterDeck}>
+      <button type="submit" className="flex items-center gap-1">
+        <RxReset /> Reset to Starter Deck
+      </button>
+    </form>
+  );
+}
+
+async function Health() {
+  const player = await getSessionPlayer();
+  if (!player) return null;
+
+  async function update(formData: FormData) {
+    "use server";
+    const health = formData.get("health");
+    if (typeof health !== "string") return;
+    await setPlayerHealth(Number(health));
+    revalidatePath("/");
+  }
+
+  return (
+    <div className="flex gap-2">
+      <div>Health</div>
+      <form action={update}>
+        <input
+          className="w-14 text-center"
+          type="number"
+          defaultValue={player.health}
+          name="health"
+        />
+        <button type="submit">Set</button>
+      </form>
     </div>
   );
 }
@@ -31,7 +75,7 @@ function Shuffle() {
     </form>
   );
 }
-export function StartEncounter() {
+function StartEncounter() {
   return (
     <form action={startEncounter}>
       <button type="submit" className="flex items-center gap-1">
@@ -42,7 +86,7 @@ export function StartEncounter() {
   );
 }
 
-export function LeaveEncounter() {
+function LeaveEncounter() {
   return (
     <form action={leaveEncounter}>
       <button type="submit" className="flex items-center gap-1">
@@ -52,7 +96,7 @@ export function LeaveEncounter() {
   );
 }
 
-export function AddCard({ cardId }: { cardId: CardId }) {
+function AddCard({ cardId }: { cardId: CardId }) {
   async function execute() {
     "use server";
     const session = await getServerSession();
@@ -67,9 +111,12 @@ export function AddCard({ cardId }: { cardId: CardId }) {
     });
     revalidatePath("/");
   }
+  const title = cardTitlesById[cardId];
   return (
     <form action={execute}>
-      <button type="submit">Add {cardId}</button>
+      <button type="submit" className="flex items-center gap-1">
+        <GiCardDraw /> Add {title}
+      </button>
     </form>
   );
 }

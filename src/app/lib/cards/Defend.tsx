@@ -4,7 +4,7 @@ import { defend } from "../actions/cards/defend";
 
 export function Defend({ card }: CardProps) {
   return (
-    <Card card={card} execute={() => defend({ card })}>
+    <Card card={card} execute={defend}>
       Block 5 damage.
     </Card>
   );
