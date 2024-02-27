@@ -9,41 +9,46 @@ datasource db {
 }
 
 model Card {
-  id    String @id @default(cuid())
-  title String
-  decks Deck[]
+  id       String       @id @unique @default(cuid())
+  cardId   CardId
+  owner    Player?      @relation(name: "deck", fields: [ownerId], references: [id])
+  ownerId  String?
+  location CardLocation
+}
+
+enum CardLocation {
+  hand
+  draw
+  discard
+  exhaust
 }
 
 model Player {
-  id        String      @id @default(cuid())
-  health    Int         @default(10)
-  maxHealth Int         @default(10)
-  block     Int         @default(0)
-  deck      Deck?       @relation()
-  Encounter Encounter[]
-}
-
-model Deck {
-  player   Player @relation(fields: [playerId], references: [id])
-  playerId String @unique
-  card     Card   @relation(fields: [cardId], references: [id])
-  cardId   String
-
-  @@id([playerId, cardId])
+  id          String   @id @unique @default(cuid())
+  health      Int      @default(10)
+  maxHealth   Int      @default(10)
+  armor       Int      @default(0)
+  encounter   Enemy?
+  encounterId String?
+  deck        Card[]   @relation(name: "deck")
+  lastActive  DateTime @default(now())
 }
 
 model Enemy {
-  id        String      @id @default(cuid())
-  health    Int
-  maxHealth Int
-  Encounter Encounter[]
+  id       String  @id @unique @default(cuid())
+  enemyId  EnemyId
+  health   Int     @default(10)
+  Player   Player  @relation(fields: [playerId], references: [id])
+  armor    Int     @default(0)
+  playerId String  @unique
 }
 
-model Encounter {
-  enemy    Enemy  @relation(fields: [enemyId], references: [id])
-  enemyId  String
-  player   Player @relation(fields: [playerId], references: [id])
-  playerId String
+enum EnemyId {
+  slime
+}
 
-  @@id([playerId, enemyId])
+enum CardId {
+  bash
+  strike
+  defend
 }

@@ -1,6 +1,10 @@
 import { getServerSession } from "next-auth";
+import { CardProps } from ".";
+import { Card } from "./Card";
 
-export function Bash() {
+export function Bash({ card }: CardProps) {
+  const damage = 4;
+  // const vulnerable = 1; // todo
   async function execute() {
     "use server";
     const session = await getServerSession();
@@ -9,35 +13,24 @@ export function Bash() {
     const player = await prisma.player.findUnique({
       where: { id },
       include: {
-        Encounter: {
-          include: { enemy: true },
-        },
+        encounter: true,
       },
     });
-    const enemy = player?.Encounter[0].enemy;
+    const enemy = player?.encounter;
     if (!enemy) return;
+
     await prisma.enemy.update({
       where: { id: enemy.id },
-      data: { health: Math.max(enemy.health - 4, 0) },
+      data: { health: Math.max(enemy.health - damage, 0) },
     });
-    // TODO: apply vulnerable
+    await prisma.card.update({
+      where: { id: card.id },
+      data: { location: "discard" },
+    });
   }
   return (
-    <form action={execute}>
-      <button
-        name="action"
-        value="bash"
-        type="submit"
-        className="w-36 h-56 bg-slate-100 rounded-md shadow-md border-2 hover:border-2 hover:scale-125 transition cursor-pointer flex flex-col"
-      >
-        <h4 className="text-lg font-bold text-center border-b w-full">Bash</h4>
-        <div className="p-1 grow gap-1 flex flex-col">
-          <div className="h-20 w-full bg-slate-300 self-center rounded-sm shadow-inner"></div>
-          <p className="text-sm p-2 text-left shadow-inner rounded-sm h-fit border-2 border-green-300 grow">
-            Deal 4 damage. Apply vulnerable.
-          </p>
-        </div>
-      </button>
-    </form>
+    <Card card={card} execute={execute}>
+      Deal {damage} damage. Apply vulnerable.
+    </Card>
   );
 }
