@@ -1,17 +1,23 @@
 import { getServerSession } from "next-auth";
-import { cardIds, cardsById } from "./lib/cards";
+import { cardsById } from "./lib/cards";
 import prisma from "./lib/prisma";
 import { CardId } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { enemyDetailsById } from "./lib/enemies";
 import { IoShieldSharp } from "react-icons/io5";
 import { endTurn } from "./lib/actions/endTurn";
+import { AdminPanel } from "./lib/AdminPanel";
+import { startEncounter } from "./lib/actions/startEncounter";
+import { leaveEncounter } from "./lib/actions/leaveEncounter";
+import { RxExit } from "react-icons/rx";
+import { LuSwords } from "react-icons/lu";
 
 export default async function App() {
   const session = await getServerSession();
+  if (!session) return null;
   const email = session?.user?.email;
   if (!email) return null;
-  const player = await prisma.player.upsert({
+  await prisma.player.upsert({
     where: { id: email },
     update: {
       lastActive: new Date(),
@@ -23,7 +29,6 @@ export default async function App() {
       maxHealth: 10,
     },
   });
-  if (!session) return null;
   return <Board />;
 }
 
@@ -36,10 +41,36 @@ export function Board() {
         <EndTurn />
         <PlayerHand />
         <DrawPile />
+        <DiscardPile />
         <Deck />
         <AdminPanel />
       </div>
     </main>
+  );
+}
+
+async function DiscardPile() {
+  const session = await getServerSession();
+  const id = session?.user?.email;
+  if (!id) return null;
+  const discardPile = await prisma.card.findMany({
+    where: {
+      ownerId: id,
+      location: "discard",
+    },
+  });
+  return (
+    <div>
+      <h2 className="text-2xl font-bold">
+        Discard Pile ({discardPile.length} Cards)
+      </h2>
+      <div className="flex flex-row gap-1">
+        {discardPile.map((card) => {
+          const CardComponent = cardsById[card.cardId];
+          return <CardComponent key={card.id} card={card} />;
+        })}
+      </div>
+    </div>
   );
 }
 
@@ -88,88 +119,6 @@ async function Deck() {
         })}
       </div>
     </div>
-  );
-}
-
-function AdminPanel() {
-  return (
-    <div className="border-2 border-slate-300 p-4 rounded-md">
-      <h3 className="text-xl font-bold">Admin</h3>
-      {cardIds.map((cardId) => (
-        <AddCard key={cardId} cardId={cardId as CardId} />
-      ))}
-      <StartEncounter />
-      <LeaveEncounter />
-    </div>
-  );
-}
-
-function StartEncounter() {
-  async function execute() {
-    "use server";
-    const session = await getServerSession();
-    const id = session?.user?.email;
-    if (!id) return;
-    const currentEncounter = await prisma.enemy.findUnique({
-      where: { playerId: id },
-    });
-    if (currentEncounter) {
-      await prisma.enemy.delete({
-        where: { playerId: id },
-      });
-    }
-    await prisma.enemy.create({
-      data: {
-        enemyId: "slime",
-        playerId: id,
-      },
-    });
-    revalidatePath("/");
-  }
-  return (
-    <form action={execute}>
-      <button type="submit">Start Encounter</button>
-    </form>
-  );
-}
-
-function LeaveEncounter() {
-  async function execute() {
-    "use server";
-    const session = await getServerSession();
-    const id = session?.user?.email;
-    if (!id) return;
-    await prisma.enemy.delete({
-      where: { playerId: id },
-    });
-    revalidatePath("/");
-  }
-  return (
-    <form action={execute}>
-      <button type="submit">Leave Encounter</button>
-    </form>
-  );
-}
-
-function AddCard({ cardId }: { cardId: CardId }) {
-  async function execute() {
-    "use server";
-    const session = await getServerSession();
-    const id = session?.user?.email;
-    if (!id) return;
-    await prisma.card.create({
-      data: {
-        cardId,
-        ownerId: id,
-        location: "draw",
-      },
-    });
-    revalidatePath("/");
-  }
-  return (
-    <form action={execute}>
-      <button type="submit">Add {cardId}</button>
-    </form>
   );
 }
 
@@ -262,8 +211,8 @@ function Stats({
 
         <div className="w-36 h-4 bg-gradient-to-b to-red-400 from-red-700 rounded-md overflow-hidden flex flex-row">
           <div
-            className={`bg-gradient-to-b from from-green-400 to-green-700 h-full shadow-2xl`}
-            style={{ width: `${percentHealth}%` }}
+            className={`bg-gradient-to-b from from-green-400 to-green-700 h-full shadow-2xl transition-transform`}
+            style={{ width: `${percentHealth}%`, transition: "width 1s" }}
           ></div>
         </div>
       </div>
@@ -273,27 +222,6 @@ function Stats({
       </div>
     </div>
   );
-}
-
-async function heal(formData: FormData) {
-  "use server";
-  const session = await getServerSession();
-  const id = session?.user?.email;
-  if (!id) return;
-
-  const player = await prisma.player.findUnique({
-    where: { id },
-  });
-
-  if (!player) return;
-
-  const healAmount = Number(formData.get("amount"));
-  const newHealth = Math.min(player.health + healAmount, player.maxHealth);
-  await prisma.player.update({
-    where: { id },
-    data: { health: newHealth },
-  });
-  revalidatePath("/");
 }
 
 async function EndTurn() {

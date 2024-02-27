@@ -1,9 +1,9 @@
+"use server";
 import { getServerSession } from "next-auth";
 import prisma from "../prisma";
 import { revalidatePath } from "next/cache";
 
 export async function drawCard(count: number): Promise<void> {
-  "use server";
   const session = await getServerSession();
   const id = session?.user?.email;
   if (!id) return;
