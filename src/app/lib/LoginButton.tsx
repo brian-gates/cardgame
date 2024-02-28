@@ -28,7 +28,12 @@ export function LoginButton() {
     return (
       <div className="flex flex-row gap-3 items-center p-3 rounded-md">
         <div className="rounded-full overflow-hidden w-8 h-8">
-          <Image src={session.data.user?.image ?? ""} alt="user avatar" />
+          <Image
+            src={session.data.user?.image ?? ""}
+            width={32}
+            height={32}
+            alt="user avatar"
+          />
         </div>
         <div className="text-sm">Signed in as {session.data.user?.name}</div>
         <button
