@@ -28,7 +28,7 @@ export default async function App() {
   return <Board />;
 }
 
-export function Board() {
+function Board() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between bg-violet-100 text-slate-800 max-w-full p-10">
       <div className="flex flex-col gap-4">
@@ -66,9 +66,10 @@ async function DiscardPile() {
           const CardComponent = cardsById[card.cardId];
           return (
             <div
+              key={card.id}
               className={`w-36 h-56 transition-transform rotate-[${i * 4}deg]`}
             >
-              <CardComponent key={card.id} card={card} />
+              <CardComponent card={card} />
             </div>
           );
         })}

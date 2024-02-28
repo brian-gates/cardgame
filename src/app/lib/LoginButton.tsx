@@ -1,5 +1,6 @@
 "use client";
 import { useSession, signIn, signOut } from "next-auth/react";
+import Image from "next/image";
 import { PiSignIn, PiSignOut } from "react-icons/pi";
 
 export function LoginButton() {
@@ -27,7 +28,7 @@ export function LoginButton() {
     return (
       <div className="flex flex-row gap-3 items-center p-3 rounded-md">
         <div className="rounded-full overflow-hidden w-8 h-8">
-          <img src={session.data.user?.image ?? ""} alt="user avatar" />
+          <Image src={session.data.user?.image ?? ""} alt="user avatar" />
         </div>
         <div className="text-sm">Signed in as {session.data.user?.name}</div>
         <button

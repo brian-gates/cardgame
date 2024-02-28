@@ -33,9 +33,10 @@ export async function PlayerHand() {
             const translation = `translate-y-[${Math.abs(distanceFromCenter)}rem`;
             return (
               <MotionDiv
+                key={card.id}
                 className={`origin-bottom ${rotation} ${translation}] group-hover:translate-y-0 group-hover:rotate-0 group-focus-within:translate-y-0 group-focus-within:rotate-0 transition-transform`}
               >
-                <Card key={card.id} card={card} />
+                <Card card={card} />
               </MotionDiv>
             );
           })}
