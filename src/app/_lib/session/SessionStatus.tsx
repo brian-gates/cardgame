@@ -29,7 +29,7 @@ function UserInfo({ user }: { user: DefaultSession["user"] }) {
   return (
     <div className="flex flex-row gap-2 items-center">
       {user.image && (
-        <div className="rounded-full overflow-hidden w-8 h-8">
+        <div className="rounded-full overflow-hidden w-8 h-8 bg-slate-600">
           <Image src={user.image} width={32} height={32} alt="user avatar" />
         </div>
       )}

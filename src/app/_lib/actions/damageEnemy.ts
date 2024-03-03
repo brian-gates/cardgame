@@ -3,13 +3,12 @@ import { getServerSession } from "next-auth";
 
 export async function damageEnemy(amount: number) {
   const session = await getServerSession();
-  const id = session?.user?.email;
-  if (!id) return;
+  const email = session?.user?.email;
+  if (!email) return;
+
   const player = await prisma.player.findUnique({
-    where: { id },
-    include: {
-      encounter: true,
-    },
+    where: { email },
+    include: { encounter: true },
   });
 
   if (!player) return;

@@ -15,8 +15,8 @@ export function Game() {
         <EnemyAvatar />
         <EndTurn />
       </div>
-      <PlayerHand />
       <DrawPile />
+      <PlayerHand />
       <DiscardPile />
       <PlayerDeck />
       <AdminPanel />

@@ -1,7 +1,6 @@
 "use server";
 
 import { CardId } from "@prisma/client";
-import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { getSessionPlayer } from "./getSessionPlayer";
 
@@ -28,11 +27,11 @@ export async function resetToStarterDeck() {
   });
   const x = await prisma.card.createMany({
     data: starterDeck.map((cardId) => ({
-      email,
+      ownerId: id,
       cardId,
       location: "draw",
     })),
   });
-  console.log({ x });
-  revalidatePath("/");
+  revalidatePath("/game");
+  return x;
 }

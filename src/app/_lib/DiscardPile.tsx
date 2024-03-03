@@ -1,13 +1,13 @@
 import { getServerSession } from "next-auth";
 import prisma from "./prisma";
+import { getSessionPlayer } from "./actions/getSessionPlayer";
 
 export async function DiscardPile() {
-  const session = await getServerSession();
-  const id = session?.user?.email;
-  if (!id) return null;
+  const player = await getSessionPlayer();
+  if (!player) return null;
 
   const count = await prisma.card.count({
-    where: { ownerId: id, location: "discard" },
+    where: { ownerId: player.id, location: "discard" },
   });
   return (
     <div className="group absolute bottom-0 right-0 p-4 flex-col-reverse flex gap-3">

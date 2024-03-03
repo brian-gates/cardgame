@@ -5,7 +5,7 @@ import { LuSwords } from "react-icons/lu";
 
 export function Bash({ card }: CardProps) {
   return (
-    <Card card={card} play={bash}>
+    <Card card={card}>
       Deal d3 <LuSwords className="inline" />.
     </Card>
   );

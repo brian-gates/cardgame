@@ -3,11 +3,11 @@ import { getServerSession } from "next-auth";
 
 export async function getSessionPlayer() {
   const session = await getServerSession();
-  const id = session?.user?.email;
-  if (!id) return null;
+  const email = session?.user?.email;
+  if (!email) return null;
   return prisma.player.findUnique({
     where: {
-      id,
+      email,
     },
   });
 }

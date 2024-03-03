@@ -5,7 +5,7 @@ import { IoShieldSharp } from "react-icons/io5";
 
 export function Defend({ card }: CardProps) {
   return (
-    <Card card={card} play={defend}>
+    <Card card={card}>
       Gain 1 <IoShieldSharp className="inline" />.
     </Card>
   );

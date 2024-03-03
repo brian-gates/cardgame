@@ -1,6 +1,4 @@
 import { getServerSession } from "next-auth";
-import prisma from "./_lib/prisma";
-import { Game } from "./_lib/Game";
 import Link from "next/link";
 
 export default async function App() {

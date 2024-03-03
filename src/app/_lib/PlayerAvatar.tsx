@@ -7,10 +7,10 @@ export async function PlayerAvatar() {
   const session = await getServerSession();
   const user = session?.user;
   if (!session || !user) return null;
-  const id = session?.user?.email;
-  if (!id) return null;
+  const email = session?.user?.email;
+  if (!email) return null;
   const player = await prisma.player.findUnique({
-    where: { id },
+    where: { email },
   });
 
   if (!player) return null;

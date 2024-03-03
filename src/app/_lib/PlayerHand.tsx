@@ -1,13 +1,12 @@
-import { getServerSession } from "next-auth";
 import prisma from "./prisma";
+import { getSessionPlayer } from "./actions/getSessionPlayer";
 
 export async function PlayerHand() {
-  const session = await getServerSession();
-  const id = session?.user?.email;
-  if (!id) return null;
+  const player = await getSessionPlayer();
+  if (!player) return null;
 
   const count = await prisma.card.count({
-    where: { ownerId: id, location: "hand" },
+    where: { ownerId: player.id, location: "hand" },
   });
 
   return (

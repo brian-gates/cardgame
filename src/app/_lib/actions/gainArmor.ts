@@ -1,25 +1,20 @@
 "use server";
 
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 
 export async function gainArmor(amount: number) {
-  "use server";
   const session = await getServerSession();
-  const id = session?.user?.email;
-  if (!id) return;
-  const player = await prisma.player.findUnique({
-    where: { id },
-    include: {
-      encounter: true,
-    },
-  });
-
-  if (!player) return;
+  const email = session?.user?.email;
+  if (!email) return;
 
   await prisma.player.update({
-    where: { id },
+    where: { email },
     data: {
-      armor: player.armor + amount,
+      armor: {
+        increment: amount,
+      },
     },
   });
+  revalidatePath("/game");
 }

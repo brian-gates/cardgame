@@ -21,5 +21,5 @@ export async function startEncounter() {
       playerId: id,
     },
   });
-  revalidatePath("/");
+  revalidatePath("/game");
 }

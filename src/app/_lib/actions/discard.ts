@@ -5,5 +5,5 @@ export async function discard(id: string) {
     where: { id },
     data: { location: "discard" },
   });
-  revalidatePath("/");
+  revalidatePath("/game");
 }

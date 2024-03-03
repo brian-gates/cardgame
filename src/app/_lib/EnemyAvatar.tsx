@@ -2,18 +2,14 @@ import { getServerSession } from "next-auth";
 import prisma from "./prisma";
 import { enemyDetailsById } from "./enemies";
 import { Stats } from "./Stats";
+import { getSessionPlayer } from "./actions/getSessionPlayer";
 
 export async function EnemyAvatar() {
-  const session = await getServerSession();
-  const id = session?.user?.email;
-  if (!id) return;
-  const player = await prisma.player.findUnique({
-    where: { id },
-    include: {
-      encounter: true,
-    },
+  const { id } = (await getSessionPlayer()) ?? {};
+
+  const enemy = await prisma.enemy.findUnique({
+    where: { playerId: id },
   });
-  const enemy = player?.encounter;
   if (!enemy) return null;
 
   const { title, maxHealth } = enemyDetailsById[enemy.enemyId];

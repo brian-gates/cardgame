@@ -12,34 +12,33 @@ export async function PlayerDeck() {
   const discard = cards.filter((card) => card.location === "discard");
 
   return (
-    <>
-      {draw.map((card, i) => (
-        <AnimatedCard
-          key={card.id}
-          card={{
-            ...card,
-            position: i,
-          }}
-        />
-      ))}
-      {discard.map((card, i) => (
-        <AnimatedCard
-          key={card.id}
-          card={{
-            ...card,
-            position: i,
-          }}
-        />
-      ))}
-      {hand.map((card, i) => (
-        <AnimatedCard
-          key={card.id}
-          card={{
-            ...card,
-            position: i,
-          }}
-        />
-      ))}
-    </>
+    <div className="absolute bottom-0 left-0 right-0 p-5 mb-10">
+      <div className="relative">
+        {draw.map((card, i) => (
+          <AnimatedCard
+            key={card.id}
+            card={card}
+            position={i}
+            handSize={hand.length}
+          />
+        ))}
+        {discard.map((card, i) => (
+          <AnimatedCard
+            key={card.id}
+            card={card}
+            position={i}
+            handSize={hand.length}
+          />
+        ))}
+        {hand.map((card, i) => (
+          <AnimatedCard
+            key={card.id}
+            card={card}
+            position={i}
+            handSize={hand.length}
+          />
+        ))}
+      </div>
+    </div>
   );
 }

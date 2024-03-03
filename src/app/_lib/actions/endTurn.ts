@@ -5,8 +5,8 @@ import { enemyTurn } from "./enemyTurn";
 import { discardHand } from "./discardHand";
 
 export async function endTurn() {
+  await enemyTurn();
   await discardHand();
   await draw(5);
-  await enemyTurn();
-  revalidatePath("/");
+  revalidatePath("/game");
 }

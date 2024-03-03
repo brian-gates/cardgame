@@ -2,51 +2,61 @@
 import { MotionDiv } from "./framer-motion";
 import { CardBack } from "./CardBack";
 import { Card } from "@prisma/client";
-import { cardsById } from "./cards";
+import { useCard } from "./cards";
 
-// const cardDimensions = {
-//   width: 144,
-//   height: 154,
-// };
+const cardWidth = 144;
 
-const pad = 20;
-
-export function AnimatedCard({ card }: { card: Card & { position?: number } }) {
-  const { position } = card;
-
-  const variants = {
-    draw: {
-      x: pad,
-      bottom: pad,
-      left: pad,
-      transform: `translateX(${(position ?? 0) * 2}px)`,
-    },
-    hand: {
-      x: "50%",
-      bottom: pad,
-      transform: `rotate(${5 - (position ?? 0) * 2}deg) translateX(${(position ?? 0) * 2}px)`,
-    },
-    discard: {
-      right: pad,
-      bottom: pad,
-      transform: `rotate(${5 - (position ?? 0) * 2}deg)`,
-    },
-  };
-
-  console.log({ position, card });
-
-  const CardComponent = cardsById[card.cardId];
+export function AnimatedCard({
+  card,
+  position = 0,
+  handSize,
+}: {
+  card: Card;
+  position?: number;
+  handSize: number;
+}) {
+  const { CardComponent } = useCard(card);
 
   return (
     <MotionDiv
+      layout
+      key={card.id}
       layoutId={card.id}
+      data-position={position}
+      data-hand-size={handSize}
+      data-location={card.location}
       className="absolute z-30"
-      initial="draw"
-      variants={variants}
+      initial={card.location}
       animate={card.location}
-      // whileHover={{ scale: 1.1 }}
+      whileHover={{
+        rotate: 0,
+        scale: 1.2,
+        zIndex: 40,
+      }}
+      style={{
+        bottom: 0,
+        scale: 1,
+        alignSelf: "flex-end",
+        transformOrigin: "bottom",
+      }}
+      variants={{
+        draw: {
+          left: 0,
+          translateX: position * 2,
+        },
+        hand: {
+          left: `50%`,
+          bottom: 50,
+          rotate: (position + 1 - handSize / 2) * 10,
+          translateX: (position - handSize / 2) * 100,
+          translateY: Math.abs(handSize / 2 - position) * 10,
+        },
+        discard: {
+          left: `calc(100% - ${cardWidth}px)`,
+          rotate: 5 - position * 2,
+        },
+      }}
     >
-      {card.location}
       {card.location !== "draw" ? <CardComponent card={card} /> : <CardBack />}
     </MotionDiv>
   );
