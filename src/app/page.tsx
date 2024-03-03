@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth";
-import prisma from "./lib/prisma";
-import { Board } from "./lib/Board";
+import prisma from "./_lib/prisma";
+import { Game } from "./_lib/Game";
+import Link from "next/link";
 
 export default async function App() {
   const session = await getServerSession();
@@ -19,5 +20,14 @@ export default async function App() {
       maxHealth: 10,
     },
   });
-  return <Board />;
+  return (
+    <div className="flex flex-col gap-3 items-center p-3 rounded-md">
+      <Link
+        className="text-2xl border border-gray-300 p-5 rounded-md"
+        href="/game"
+      >
+        Play
+      </Link>
+    </div>
+  );
 }

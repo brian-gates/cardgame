@@ -7,7 +7,7 @@ import { EndTurn } from "./EndTurn";
 import { DrawPile } from "./DrawPile";
 import { DiscardPile } from "./DiscardPile";
 
-export function Board() {
+export function Game() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between max-w-full p-10">
       <div className="flex flex-col gap-4">
