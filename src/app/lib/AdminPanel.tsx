@@ -11,6 +11,8 @@ import { getSessionPlayer } from "./actions/getSessionPlayer";
 import { setPlayerHealth } from "./actions/setPlayerHealth";
 import { GiCardDraw, GiHealthNormal } from "react-icons/gi";
 import { resetToStarterDeck } from "./actions/resetToStarterDeck";
+import { draw, draw1 } from "./actions/draw";
+import { EndTurn } from "./EndTurn";
 
 export function AdminPanel() {
   return (
@@ -24,11 +26,23 @@ export function AdminPanel() {
       <Shuffle />
       <Health />
       <ResetToStarterDeck />
+      <Draw />
+      <EndTurn />
     </div>
   );
 }
 
-async function ResetToStarterDeck() {
+function Draw() {
+  return (
+    <form action={draw1}>
+      <button type="submit" className="flex items-center gap-1">
+        <GiCardDraw /> Draw 1
+      </button>
+    </form>
+  );
+}
+
+function ResetToStarterDeck() {
   return (
     <form action={resetToStarterDeck}>
       <button type="submit" className="flex items-center gap-1">
@@ -101,8 +115,7 @@ function LeaveEncounter() {
 function AddCard({ cardId }: { cardId: CardId }) {
   async function execute() {
     "use server";
-    const session = await getServerSession();
-    const id = session?.user?.email;
+    const { id } = (await getSessionPlayer()) ?? {};
     if (!id) return;
     await prisma.card.create({
       data: {

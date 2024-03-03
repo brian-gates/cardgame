@@ -2,27 +2,22 @@
 
 import { Card } from "@prisma/client";
 import { cardTitlesById } from ".";
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 
 export function Card({
   card,
-  execute,
+  play,
   children,
 }: {
   card: Card;
-  execute: (card: Card) => Promise<void>;
+  play: (card: Card) => Promise<void>;
   children: ReactNode;
 }) {
-  const [isPlaying, setIsPlaying] = useState(false);
   const title = cardTitlesById[card.cardId];
   return (
     <button
-      onClick={async () => {
-        setIsPlaying(true);
-        await execute(card);
-        setIsPlaying(false);
-      }}
-      className="w-36 h-56 bg-slate-100 rounded-md border-2 cursor-pointer flex flex-col"
+      onClick={() => play(card)}
+      className="w-36 h-56 bg-slate-100 text-slate-800 rounded-md border-2 cursor-pointer flex flex-col"
     >
       <h4 className="text-lg font-bold text-center border-b w-full">{title}</h4>
       <div className="p-1 grow gap-1 flex flex-col">

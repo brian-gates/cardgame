@@ -25,6 +25,7 @@ enum CardLocation {
 
 model Player {
   id          String   @id @unique @default(cuid())
+  email       String   @unique
   health      Int      @default(10)
   maxHealth   Int      @default(10)
   armor       Int      @default(0)
@@ -32,6 +33,8 @@ model Player {
   encounterId String?
   deck        Card[]   @relation(name: "deck")
   lastActive  DateTime @default(now())
+
+  @@index([email])
 }
 
 model Enemy {

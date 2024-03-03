@@ -6,7 +6,7 @@ import { discardHand } from "./discardHand";
 
 export async function endTurn() {
   await discardHand();
-  await draw(7);
+  await draw(5);
   await enemyTurn();
   revalidatePath("/");
 }

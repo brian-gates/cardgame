@@ -2,10 +2,10 @@
 import { getServerSession } from "next-auth";
 import prisma from "../prisma";
 import { revalidatePath } from "next/cache";
+import { getSessionPlayer } from "./getSessionPlayer";
 
 export async function startEncounter() {
-  const session = await getServerSession();
-  const id = session?.user?.email;
+  const { id } = (await getSessionPlayer()) ?? {};
   if (!id) return;
   const currentEncounter = await prisma.enemy.findUnique({
     where: { playerId: id },

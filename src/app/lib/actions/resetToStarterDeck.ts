@@ -3,6 +3,7 @@
 import { CardId } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
+import { getSessionPlayer } from "./getSessionPlayer";
 
 const starterDeck: CardId[] = [
   "bash",
@@ -17,20 +18,21 @@ const starterDeck: CardId[] = [
 ];
 
 export async function resetToStarterDeck() {
-  const session = await getServerSession();
-  const playerId = session?.user?.email;
-  if (!playerId) return;
+  const player = await getSessionPlayer();
+  const { id, email } = player ?? {};
+  if (!id || !email) return;
   await prisma.card.deleteMany({
     where: {
-      ownerId: playerId,
+      ownerId: id,
     },
   });
-  await prisma.card.createMany({
+  const x = await prisma.card.createMany({
     data: starterDeck.map((cardId) => ({
-      ownerId: playerId,
+      email,
       cardId,
       location: "draw",
     })),
   });
+  console.log({ x });
   revalidatePath("/");
 }
