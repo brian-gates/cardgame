@@ -1,25 +1,19 @@
 import { AdminPanel } from "./AdminPanel";
 import { PlayerHand } from "./PlayerHand";
 import { PlayerDeck } from "./PlayerDeck";
-import { PlayerAvatar } from "./PlayerAvatar";
-import { EnemyAvatar } from "./EnemyAvatar";
-import { EndTurn } from "./EndTurn";
 import { DrawPile } from "./DrawPile";
 import { DiscardPile } from "./DiscardPile";
+import { ReactNode } from "react";
 
-export function Game() {
+export function Game({ children }: { children: ReactNode }) {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between max-w-full p-10">
-      <div className="flex flex-col gap-4">
-        <PlayerAvatar />
-        <EnemyAvatar />
-        <EndTurn />
-      </div>
+    <div className="flex min-h-screen flex-col items-center justify-between max-w-full p-10">
+      {children}
       <DrawPile />
       <PlayerHand />
       <DiscardPile />
       <PlayerDeck />
       <AdminPanel />
-    </main>
+    </div>
   );
 }

@@ -9,11 +9,11 @@ datasource db {
 }
 
 model Card {
-  id       String       @id @unique @default(cuid())
-  cardId   CardId
-  owner    Player?      @relation(name: "deck", fields: [ownerId], references: [id])
-  ownerId  String?
-  location CardLocation
+  id         String       @id @unique @default(cuid())
+  templateId CardTemplate
+  owner      Player?      @relation(name: "deck", fields: [ownerId], references: [id])
+  ownerId    String?
+  location   CardLocation
 }
 
 enum CardLocation {
@@ -50,8 +50,10 @@ enum EnemyId {
   slime
 }
 
-enum CardId {
+enum CardTemplate {
   bash
   strike
   defend
+
+  @@map("CardId")
 }

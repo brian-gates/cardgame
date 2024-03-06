@@ -1,4 +1,4 @@
-import { Card, CardId } from "@prisma/client";
+import { Card, CardTemplate } from "@prisma/client";
 import { Bash } from "./Bash";
 import { Defend } from "./Defend";
 import { Strike } from "./Strike";
@@ -6,10 +6,12 @@ import { FC, useMemo } from "react";
 import { cardActionsById } from "../actions/cards";
 
 export type CardProps = {
-  card: Card;
+  card?: Card;
+  templateId: CardTemplate;
+  onClick?: () => void;
 };
 
-const cardComponentsById: Record<CardId, FC<CardProps>> = {
+export const cardComponentsById: Record<CardTemplate, FC<CardProps>> = {
   bash: Bash,
   strike: Strike,
   defend: Defend,
@@ -19,18 +21,29 @@ export const cardTitlesById = {
   bash: "Bash",
   strike: "Strike",
   defend: "Defend",
-} as const satisfies Record<CardId, string>;
+} as const satisfies Record<CardTemplate, string>;
 
-export const useCard = (card: Card) => {
+export const useCard = ({
+  card,
+  templateId,
+}: {
+  card?: Card;
+  templateId: CardTemplate;
+}) => {
   return useMemo(() => {
-    const title = cardTitlesById[card.cardId];
-    const CardComponent = cardComponentsById[card.cardId];
-    const play = () => cardActionsById[card.cardId](card);
+    const title = cardTitlesById[templateId];
+    const CardComponent = cardComponentsById[templateId];
+    const play = card ? () => cardActionsById[templateId](card) : undefined;
     return { title, CardComponent, play };
-  }, [card.cardId]);
+  }, [templateId]);
 };
 
-export const cardIds = Object.keys(cardTitlesById) as CardId[];
+export const useCardAction = (card: Card) => {
+  const play = card ? () => cardActionsById[card.templateId](card) : undefined;
+  return play;
+};
 
-export const isCardId = (id: string): id is CardId =>
-  cardIds.includes(id as CardId);
+export const templateIds = Object.keys(cardTitlesById) as CardTemplate[];
+
+export const isTemplateId = (id: string): id is CardTemplate =>
+  templateIds.includes(id as CardTemplate);

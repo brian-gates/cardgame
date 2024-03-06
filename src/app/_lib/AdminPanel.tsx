@@ -1,5 +1,4 @@
-import { cardTitlesById } from "./cards";
-import { CardId } from "@prisma/client";
+import { cardTitlesById, isTemplateId } from "./cards";
 import { shuffle } from "./actions/shuffle";
 import { LuShuffle, LuSwords } from "react-icons/lu";
 import { startEncounter } from "./actions/startEncounter";
@@ -34,26 +33,27 @@ export function AdminPanel() {
 function AddCard() {
   async function execute(formData: FormData) {
     "use server";
-    const cardId = formData.get("cardId");
-    if (typeof cardId !== "string") return;
-    await addCard({ cardId: cardId as CardId, location: "draw" });
+    const templateId = formData.get("templateId");
+    if (typeof templateId !== "string") return;
+    if (!isTemplateId(templateId)) return;
+    await addCard({ templateId, location: "draw" });
     revalidatePath("/game");
   }
   return (
     <form action={execute} className="flex gap-2 items-center">
+      <button type="submit" className="flex items-center gap-1">
+        <GiCardDraw /> Add
+      </button>
       <select
-        name="cardId"
+        name="templateId"
         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
       >
-        {Object.entries(cardTitlesById).map(([cardId, title]) => (
-          <option key={cardId} value={cardId}>
+        {Object.entries(cardTitlesById).map(([templateId, title]) => (
+          <option key={templateId} value={templateId}>
             {title}
           </option>
         ))}
       </select>
-      <button type="submit" className="flex items-center gap-1">
-        <GiCardDraw /> Add
-      </button>
     </form>
   );
 }

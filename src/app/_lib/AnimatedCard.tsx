@@ -15,7 +15,8 @@ export function AnimatedCard({
   position?: number;
   handSize: number;
 }) {
-  const { CardComponent } = useCard(card);
+  const { templateId } = card;
+  const { CardComponent } = useCard({ templateId });
 
   return (
     <MotionDiv
@@ -57,7 +58,11 @@ export function AnimatedCard({
         },
       }}
     >
-      {card.location !== "draw" ? <CardComponent card={card} /> : <CardBack />}
+      {card.location !== "draw" ? (
+        <CardComponent card={card} templateId={templateId} />
+      ) : (
+        <CardBack />
+      )}
     </MotionDiv>
   );
 }

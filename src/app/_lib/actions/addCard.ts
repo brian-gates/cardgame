@@ -1,12 +1,12 @@
-import { CardId, CardLocation } from "@prisma/client";
+import { CardTemplate, CardLocation } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { getSessionPlayer } from "./getSessionPlayer";
 
 export async function addCard({
-  cardId,
+  templateId,
   location = "draw",
 }: {
-  cardId: CardId;
+  templateId: CardTemplate;
   location: CardLocation;
 }) {
   "use server";
@@ -14,7 +14,7 @@ export async function addCard({
   if (!id) return;
   await prisma.card.create({
     data: {
-      cardId,
+      templateId: templateId,
       ownerId: id,
       location,
     },

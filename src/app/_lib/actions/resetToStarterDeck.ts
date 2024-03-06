@@ -1,13 +1,11 @@
 "use server";
 
-import { CardId } from "@prisma/client";
+import { CardTemplate } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { getSessionPlayer } from "./getSessionPlayer";
 
-const starterDeck: CardId[] = [
+const starterDeck: CardTemplate[] = [
   "bash",
-  "defend",
-  "defend",
   "defend",
   "defend",
   "strike",
@@ -25,13 +23,12 @@ export async function resetToStarterDeck() {
       ownerId: id,
     },
   });
-  const x = await prisma.card.createMany({
-    data: starterDeck.map((cardId) => ({
+  await prisma.card.createMany({
+    data: starterDeck.map((templateId) => ({
       ownerId: id,
-      cardId,
+      templateId,
       location: "draw",
     })),
   });
   revalidatePath("/game");
-  return x;
 }
