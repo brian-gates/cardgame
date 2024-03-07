@@ -1,9 +1,9 @@
 "use server";
 
-import prisma from "../prisma";
+import prisma from "../../prisma";
 import { revalidatePath } from "next/cache";
 import { shuffle } from "./shuffle";
-import { getSessionPlayer } from "./getSessionPlayer";
+import { getSessionPlayer } from "../getSessionPlayer";
 
 /**
  * Draw cards from the draw pile, shuffling if necessary

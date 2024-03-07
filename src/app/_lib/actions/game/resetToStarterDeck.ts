@@ -2,7 +2,7 @@
 
 import { CardTemplate } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { getSessionPlayer } from "./getSessionPlayer";
+import { getSessionPlayer } from "../getSessionPlayer";
 
 const starterDeck: CardTemplate[] = [
   "bash",

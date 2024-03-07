@@ -2,7 +2,7 @@
  * Discard the player's hand
  * */
 
-import { getSessionPlayer } from "./getSessionPlayer";
+import { getSessionPlayer } from "../getSessionPlayer";
 
 export async function discardHand() {
   const player = await getSessionPlayer();

@@ -1,5 +1,5 @@
 "use server";
-import { getSessionPlayer } from "./getSessionPlayer";
+import { getSessionPlayer } from "../getSessionPlayer";
 
 export async function setPlayerHealth(health: number) {
   const player = await getSessionPlayer();

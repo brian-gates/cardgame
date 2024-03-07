@@ -1,7 +1,7 @@
 "use server";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
-import { getSessionPlayer } from "./getSessionPlayer";
+import { getSessionPlayer } from "../getSessionPlayer";
 
 // shuffle the player's discard pile into their deck
 export async function shuffle() {

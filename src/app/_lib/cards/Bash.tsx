@@ -1,13 +1,16 @@
-import { CardProps } from ".";
-import { Card } from "./Card";
+import { CardBorder } from "./CardBorder";
 import { LuSwords } from "react-icons/lu";
 
-export function Bash({ card, templateId, onClick }: CardProps) {
+export function Bash() {
+  return <BashTemplate />;
+}
+
+export function BashTemplate() {
   return (
-    <Card card={card} templateId={templateId} onClick={onClick}>
+    <CardBorder title="Bash" image={"/cards/bash.png"}>
       <p className="text-2xl text-center">
         d3 <LuSwords className="inline" />
       </p>
-    </Card>
+    </CardBorder>
   );
 }

@@ -1,14 +1,16 @@
-import { CardProps } from ".";
-import { Card } from "./Card";
-import { defend } from "../actions/cards/defend";
+import { CardBorder } from "./CardBorder";
 import { IoShieldSharp } from "react-icons/io5";
 
-export function Defend({ card, templateId, onClick }: CardProps) {
+export function Defend() {
+  return <DefendTemplate />;
+}
+
+export function DefendTemplate() {
   return (
-    <Card card={card} templateId={templateId} onClick={onClick}>
+    <CardBorder title="Defend" image="/cards/defend.png">
       <p className="text-2xl text-center">
         1 <IoShieldSharp className="inline" />
       </p>
-    </Card>
+    </CardBorder>
   );
 }

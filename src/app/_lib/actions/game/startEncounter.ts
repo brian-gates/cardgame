@@ -1,8 +1,7 @@
 "use server";
-import { getServerSession } from "next-auth";
-import prisma from "../prisma";
+import prisma from "../../prisma";
 import { revalidatePath } from "next/cache";
-import { getSessionPlayer } from "./getSessionPlayer";
+import { getSessionPlayer } from "../getSessionPlayer";
 
 export async function startEncounter() {
   const { id } = (await getSessionPlayer()) ?? {};

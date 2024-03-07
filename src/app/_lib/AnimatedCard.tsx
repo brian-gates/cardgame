@@ -2,7 +2,8 @@
 import { MotionDiv } from "./framer-motion";
 import { CardBack } from "./CardBack";
 import { Card } from "@prisma/client";
-import { useCard } from "./cards";
+import { CardFront } from "./cards/CardFront";
+import { PlayableCard } from "./PlayableCard";
 
 const cardWidth = 144;
 
@@ -10,14 +11,26 @@ export function AnimatedCard({
   card,
   position = 0,
   handSize,
+  playable,
 }: {
   card: Card;
   position?: number;
   handSize: number;
+  playable?: boolean;
 }) {
-  const { templateId } = card;
-  const { CardComponent } = useCard({ templateId });
-
+  function Card() {
+    if (playable) {
+      return (
+        <PlayableCard card={card}>
+          <CardFront templateId={card.templateId} />
+        </PlayableCard>
+      );
+    }
+    if (card.location === "draw") {
+      return <CardBack />;
+    }
+    return <CardFront templateId={card.templateId} />;
+  }
   return (
     <MotionDiv
       layout
@@ -58,11 +71,7 @@ export function AnimatedCard({
         },
       }}
     >
-      {card.location !== "draw" ? (
-        <CardComponent card={card} templateId={templateId} />
-      ) : (
-        <CardBack />
-      )}
+      <Card />
     </MotionDiv>
   );
 }

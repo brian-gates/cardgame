@@ -1,5 +1,5 @@
 import { revalidatePath } from "next/cache";
-import { getSessionPlayer } from "./getSessionPlayer";
+import { getSessionPlayer } from "../getSessionPlayer";
 
 export async function damagePlayer(amount: number) {
   const player = await getSessionPlayer();

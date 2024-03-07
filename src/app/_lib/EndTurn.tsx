@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import prisma from "./prisma";
-import { endTurn } from "./actions/endTurn";
+import { endTurn } from "./actions/game/endTurn";
 import { GiCardDraw } from "react-icons/gi";
 import { getSessionPlayer } from "./actions/getSessionPlayer";
 

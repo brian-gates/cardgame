@@ -36,6 +36,7 @@ export async function PlayerDeck() {
             card={card}
             position={i}
             handSize={hand.length}
+            playable
           />
         ))}
       </div>

@@ -1,7 +1,7 @@
 "use server";
 import { getServerSession } from "next-auth";
-import { enemyActionsById } from "../enemies";
-import { getSessionPlayer } from "./getSessionPlayer";
+import { enemyActionsById } from "../../enemies";
+import { getSessionPlayer } from "../getSessionPlayer";
 
 export async function enemyTurn() {
   const player = await getSessionPlayer();

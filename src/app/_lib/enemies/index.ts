@@ -1,5 +1,5 @@
 import { EnemyId } from "@prisma/client";
-import { damagePlayer } from "../actions/damagePlayer";
+import { damagePlayer } from "../actions/game/damagePlayer";
 
 export const enemyIds: EnemyId[] = ["slime"] as const;
 

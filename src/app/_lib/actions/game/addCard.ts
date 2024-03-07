@@ -1,6 +1,6 @@
 import { CardTemplate, CardLocation } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { getSessionPlayer } from "./getSessionPlayer";
+import { getSessionPlayer } from "../getSessionPlayer";
 
 export async function addCard({
   templateId,

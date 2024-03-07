@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "db:push": "prisma db push",
-    "tsc:watch": "tsc -w"
+    "tsc:watch": "tsc -w",
+    "db:studio": "prisma studio"
   },
   "dependencies": {
     "@prisma/client": "5.10.2",

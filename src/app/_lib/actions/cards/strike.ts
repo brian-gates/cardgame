@@ -1,7 +1,7 @@
 "use server";
 import { Card } from "@prisma/client";
-import { discard } from "../discard";
-import { damageEnemy } from "../damageEnemy";
+import { discard } from "../game/discard";
+import { damageEnemy } from "../game/damageEnemy";
 
 export async function strike(card: Card) {
   await damageEnemy(1);

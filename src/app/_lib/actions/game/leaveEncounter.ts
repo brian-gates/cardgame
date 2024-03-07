@@ -1,8 +1,9 @@
 "use server";
-import { getServerSession } from "next-auth";
-import prisma from "../prisma";
+
+import prisma from "../../prisma";
 import { revalidatePath } from "next/cache";
-import { getSessionPlayer } from "./getSessionPlayer";
+import { getSessionPlayer } from "../getSessionPlayer";
+import { redirect } from "next/navigation";
 
 export async function leaveEncounter() {
   const player = await getSessionPlayer();
@@ -10,5 +11,6 @@ export async function leaveEncounter() {
   await prisma.enemy.delete({
     where: { playerId: player.id },
   });
-  revalidatePath("/game");
+  revalidatePath("/game/combat");
+  redirect("/game");
 }

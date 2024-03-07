@@ -1,18 +1,18 @@
-import { cardTitlesById, isTemplateId } from "./cards";
-import { shuffle } from "./actions/shuffle";
+import { cardTitlesById, isCardTemplate } from "./cards";
+import { shuffle } from "./actions/game/shuffle";
 import { LuShuffle, LuSwords } from "react-icons/lu";
-import { startEncounter } from "./actions/startEncounter";
+import { startEncounter } from "./actions/game/startEncounter";
 import { revalidatePath } from "next/cache";
 import { RxExit, RxReset } from "react-icons/rx";
-import { leaveEncounter } from "./actions/leaveEncounter";
+import { leaveEncounter } from "./actions/game/leaveEncounter";
 import { getSessionPlayer } from "./actions/getSessionPlayer";
-import { setPlayerHealth } from "./actions/setPlayerHealth";
+import { setPlayerHealth } from "./actions/game/setPlayerHealth";
 import { GiCardDraw, GiHealthNormal } from "react-icons/gi";
-import { resetToStarterDeck } from "./actions/resetToStarterDeck";
-import { draw1 } from "./actions/draw";
+import { resetToStarterDeck } from "./actions/game/resetToStarterDeck";
+import { draw1 } from "./actions/game/draw";
 import { IoReload } from "react-icons/io5";
-import { reload } from "./actions/reload";
-import { addCard } from "./actions/addCard";
+import { reload } from "./actions/game/reload";
+import { addCard } from "./actions/game/addCard";
 
 export function AdminPanel() {
   return (
@@ -35,7 +35,7 @@ function AddCard() {
     "use server";
     const templateId = formData.get("templateId");
     if (typeof templateId !== "string") return;
-    if (!isTemplateId(templateId)) return;
+    if (!isCardTemplate(templateId)) return;
     await addCard({ templateId, location: "draw" });
     revalidatePath("/game");
   }
