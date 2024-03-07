@@ -21,5 +21,3 @@ jobs:
         run: pnpm install
       - name: Build
         run: pnpm build
-      - name: Migrate
-        run: pnpm db:migrate
