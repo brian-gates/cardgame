@@ -11,9 +11,9 @@ export function EncounterEnemies({
 }: {
   encounter: Awaited<ReturnType<typeof getEncounter>>;
 }) {
-  if (!encounter) return;
   const enemy = useSearchParams().get("enemy");
   const queryString = useQueryString();
+  if (!encounter) return;
 
   return (
     <div className="flex flex-col gap-5">
