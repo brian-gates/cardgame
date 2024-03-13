@@ -1,6 +1,7 @@
 import { EnemyTemplate } from "@prisma/client";
 import { damagePlayer } from "../actions/game/damagePlayer";
 import { slime } from "./slime";
+import { roll } from "../roll";
 
 export const enemyTemplates: EnemyTemplate[] = ["slime"] as const;
 
@@ -18,6 +19,6 @@ export const enemyDetailsById: Record<EnemyTemplate, EnemyDetails> = {
 
 export const enemyActionsById: Record<EnemyTemplate, () => Promise<void>> = {
   slime: async () => {
-    await damagePlayer(1);
+    await damagePlayer(roll(3));
   },
 };

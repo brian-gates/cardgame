@@ -1,8 +1,6 @@
 import { AnimatedCard } from "./AnimatedCard";
 import { getSessionPlayer } from "./actions/getSessionPlayer";
 
-export const dynamic = "force-dynamic";
-
 export async function Cards() {
   const player = await getSessionPlayer();
   if (!player) return null;

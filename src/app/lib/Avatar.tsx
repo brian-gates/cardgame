@@ -8,14 +8,14 @@ export function Avatar({
   health,
   maxHealth,
   armor,
-  isSelected,
+  isSelected = false,
 }: {
   image?: string;
   name: string;
   health: number;
   maxHealth: number;
   armor: number;
-  isSelected: boolean;
+  isSelected?: boolean;
 }) {
   return (
     <div

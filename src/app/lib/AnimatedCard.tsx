@@ -11,8 +11,6 @@ import { PlayableCard } from "./PlayableCard";
 const cardWidth = 144;
 const cardHeight = 224;
 
-export const dynamic = "force-dynamic";
-
 export function AnimatedCard({
   card,
   position = 0,

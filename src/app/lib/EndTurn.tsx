@@ -1,16 +1,11 @@
-import { getServerSession } from "next-auth";
-import prisma from "./prisma";
 import { endTurn } from "./actions/game/endTurn";
 import { GiCardDraw } from "react-icons/gi";
 import { getSessionPlayer } from "./actions/getSessionPlayer";
+import { getEncounter } from "./enemies/getEncounter";
 
 export async function EndTurn() {
-  const player = await getSessionPlayer();
-  if (!player) return;
-  const encounter = await prisma.encounter.findUnique({
-    where: { playerId: player.id },
-  });
-  if (!encounter) return null;
+  if (!(await getSessionPlayer())) return;
+  if (!(await getEncounter())) return;
   return (
     <form action={endTurn}>
       <button

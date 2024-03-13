@@ -1,4 +1,3 @@
-import prisma from "./prisma";
 import { getSessionPlayer } from "./actions/getSessionPlayer";
 
 export async function PlayerHand() {

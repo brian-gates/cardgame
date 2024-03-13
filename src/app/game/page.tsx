@@ -3,13 +3,11 @@ import { getEncounter } from "../lib/enemies/getEncounter";
 import { getServerSession } from "next-auth";
 import { adventure } from "../lib/actions/game/adventure";
 
-export default async function GamePage({}: {}) {
-  const session = await getServerSession();
-  if (!session) {
+export default async function GamePage() {
+  if (!(await getServerSession())) {
     redirect("/");
   }
-  const encounter = await getEncounter();
-  if (encounter) {
+  if (await getEncounter()) {
     redirect("/game/combat");
   }
   return (

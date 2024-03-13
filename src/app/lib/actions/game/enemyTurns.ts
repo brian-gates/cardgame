@@ -2,6 +2,7 @@
 import { enemyDetailsById } from "../../enemies";
 import { getSessionPlayer } from "../getSessionPlayer";
 import { revalidatePath } from "next/cache";
+import { advanceRound } from "./advanceRound";
 
 export async function enemyTurns() {
   const player = await getSessionPlayer();
@@ -21,5 +22,6 @@ export async function enemyTurns() {
   for (const action of actions) {
     await action();
   }
+  await advanceRound();
   revalidatePath("/game/combat");
 }

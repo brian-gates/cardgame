@@ -2,8 +2,6 @@ import { getServerSession } from "next-auth";
 import Link from "next/link";
 import prisma from "@/app/lib/prisma";
 
-export const dynamic = "force-dynamic";
-
 export default async function App() {
   const session = await getServerSession();
   if (!session) return null;

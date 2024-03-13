@@ -7,7 +7,7 @@ export async function getEncounter() {
 
   if (!id) return;
 
-  return prisma.encounter.findFirst({
+  return prisma.encounter.findUnique({
     where: { playerId: id },
     include: { enemies: true },
   });
