@@ -24,30 +24,38 @@ enum CardLocation {
 }
 
 model Player {
-  id          String   @id @unique @default(cuid())
-  email       String   @unique
-  health      Int      @default(10)
-  maxHealth   Int      @default(10)
-  armor       Int      @default(0)
-  encounter   Enemy?
-  encounterId String?
-  deck        Card[]   @relation(name: "deck")
-  lastActive  DateTime @default(now())
+  id         String     @id @unique @default(cuid())
+  email      String     @unique
+  health     Int        @default(10)
+  maxHealth  Int        @default(10)
+  armor      Int        @default(0)
+  deck       Card[]     @relation(name: "deck")
+  lastActive DateTime   @default(now())
+  encounter  Encounter?
 
   @@index([email])
 }
 
-model Enemy {
+model Encounter {
   id       String  @id @unique @default(cuid())
-  enemyId  EnemyId
-  health   Int     @default(10)
-  Player   Player  @relation(fields: [playerId], references: [id])
-  armor    Int     @default(0)
+  enemies  Enemy[]
+  player   Player  @relation(fields: [playerId], references: [id])
   playerId String  @unique
 }
 
-enum EnemyId {
+model Enemy {
+  id          String        @id @unique @default(cuid())
+  templateId  EnemyTemplate
+  health      Int           @default(10)
+  armor       Int           @default(0)
+  Encounter   Encounter?    @relation(fields: [encounterId], references: [id])
+  encounterId String?
+}
+
+enum EnemyTemplate {
   slime
+
+  @@map("EnemyId")
 }
 
 enum CardTemplate {
