@@ -30,7 +30,9 @@ export default async function CombatPage({
   );
 
   if (targetedEnemy?.health === 0) {
-    redirect(`/game/combat?card=${searchParams.card}`);
+    redirect(
+      `/game/combat${searchParams.card ? `?card=${searchParams.card}` : ""}`
+    );
   }
 
   if (searchParams.card) {
