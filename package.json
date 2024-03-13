@@ -10,7 +10,7 @@
     "tsc:watch": "tsc -w",
     "postinstall": "pnpm db:generate",
     "db:generate": "prisma generate",
-    "db:push": "prisma db push",
+    "db:push": "prisma db push --force-reset",
     "db:studio": "prisma studio",
     "db:migrate": "prisma migrate deploy",
     "vercel-build": "pnpm db:push && pnpm db:migrate && pnpm build"
