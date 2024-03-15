@@ -1,0 +1,11 @@
+- show enemy intent
+- show damage dealt
+- add
+  - more cards
+  - relics
+  - status effects
+  - more enemies
+  - multiple enemies (wip)
+    - drag and drop targeting
+  - map
+  - events
