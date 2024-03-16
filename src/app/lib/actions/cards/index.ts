@@ -9,7 +9,7 @@ export type CardAction = ({
 }: {
   card: Card;
   enemyId?: string;
-}) => Promise<boolean>;
+}) => Promise<true | { errorType: "target_required" }>;
 
 export const cardActionsByTemplateId: Record<CardTemplate, CardAction> = {
   strike,
