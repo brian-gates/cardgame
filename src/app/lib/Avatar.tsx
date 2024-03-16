@@ -1,6 +1,5 @@
 import { Stats } from "./Stats";
 import Image from "next/image";
-import { cn } from "./cn";
 
 export function Avatar({
   image,
@@ -8,21 +7,15 @@ export function Avatar({
   health,
   maxHealth,
   armor,
-  isSelected = false,
 }: {
   image?: string;
   name: string;
   health: number;
   maxHealth: number;
   armor: number;
-  isSelected?: boolean;
 }) {
   return (
-    <div
-      className={cn(`flex flex-row gap-3 p-3 rounded-lg`, {
-        "border-4 border-blue-500": isSelected,
-      })}
-    >
+    <div className="flex flex-row gap-3 p-3 rounded-lg">
       {image && (
         <div className="rounded-full overflow-hidden w-[100px] h-[100px] shadow-lg">
           <Image src={image} width={100} height={100} alt={name} />

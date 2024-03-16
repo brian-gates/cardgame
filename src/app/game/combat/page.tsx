@@ -3,6 +3,7 @@ import { getSessionPlayer } from "@/app/lib/actions/getSessionPlayer";
 import { getEncounter } from "@/app/lib/enemies/getEncounter";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { FaArrowUp } from "react-icons/fa";
 
 export default async function CombatPage({
   searchParams,
@@ -40,15 +41,21 @@ export default async function CombatPage({
       where: { id: searchParams.card, location: "hand" },
     });
     if (!card) return;
-    if (
-      await cardActionsByTemplateId[card.templateId]({
-        card,
-        enemyId: searchParams.enemy,
-      })
-    ) {
+    const result = await cardActionsByTemplateId[card.templateId]({
+      card,
+      enemyId: searchParams.enemy,
+    });
+    if (result === true) {
       revalidatePath("/game");
       revalidatePath("/game/combat", "layout");
       redirect(`/game/combat?enemy=${searchParams.enemy}`);
+    }
+    if (result.errorType === "target_required") {
+      return (
+        <h2 className="text-2xl flex items-center gap-2">
+          Choose a target <FaArrowUp />
+        </h2>
+      );
     }
   }
 }

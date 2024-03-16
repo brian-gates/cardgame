@@ -5,6 +5,7 @@ import { Avatar } from "./Avatar";
 import Link from "next/link";
 import { useQueryString } from "./useQueryString";
 import { useSearchParams } from "next/navigation";
+import { cn } from "./cn";
 
 export function EncounterEnemies({
   encounter,
@@ -21,7 +22,16 @@ export function EncounterEnemies({
         const { name, maxHealth, image } = enemyDetailsById[templateId];
         const isSelected = enemy === id;
         return (
-          <Link key={id} href={"?" + queryString("enemy", id)}>
+          <Link
+            key={id}
+            href={"?" + queryString("enemy", id)}
+            className={cn(
+              "hover:bg-slate-300 hover:bg-opacity-10 rounded-lg border-2 border-slate-700",
+              {
+                "bg-slate-300 bg-opacity-10 border-blue-500": isSelected,
+              }
+            )}
+          >
             <Avatar
               {...{
                 image,
