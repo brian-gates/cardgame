@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import Link from "next/link";
-import prisma from "@/app/_lib/prisma";
+import prisma from "@/app/lib/prisma";
 
 export default async function App() {
   const session = await getServerSession();

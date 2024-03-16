@@ -1,8 +1,8 @@
-import { leaveEncounter } from "@/app/_lib/actions/game/leaveEncounter";
-import { isCardTemplate } from "@/app/_lib/cards";
-import { CardFront } from "@/app/_lib/cards/CardFront";
-import { addCard } from "@/app/_lib/actions/game/addCard";
-import { getRandomCard } from "@/app/_lib/actions/game/getRandomCard";
+import { leaveEncounter } from "@/app/lib/actions/game/leaveEncounter";
+import { isCardTemplate } from "@/app/lib/cards";
+import { CardFront } from "@/app/lib/cards/CardFront";
+import { addCard } from "@/app/lib/actions/game/addCard";
+import { getRandomCard } from "@/app/lib/actions/game/getRandomCard";
 
 export async function CardChoice() {
   const card1 = getRandomCard();

@@ -1,15 +1,20 @@
 import { redirect } from "next/navigation";
-import { getEnemy } from "../_lib/enemies/getEnemy";
+import { getEncounter } from "../lib/enemies/getEncounter";
 import { getServerSession } from "next-auth";
+import { adventure } from "../lib/actions/game/adventure";
 
 export default async function GamePage() {
-  const session = await getServerSession();
-  if (!session) {
+  if (!(await getServerSession())) {
     redirect("/");
   }
-  const enemy = await getEnemy();
-  if (enemy) {
+  if (await getEncounter()) {
     redirect("/game/combat");
   }
-  return null;
+  return (
+    <form action={adventure}>
+      <button type="submit" className="bg-blue-500 text-white p-4 rounded-lg">
+        Adventure!
+      </button>
+    </form>
+  );
 }
