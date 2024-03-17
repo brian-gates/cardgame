@@ -38,6 +38,7 @@ model Player {
 
 model Encounter {
   id       String  @id @unique @default(cuid())
+  name     String  @default("Unnamed encounter")
   enemies  Enemy[]
   player   Player  @relation(fields: [playerId], references: [id])
   playerId String  @unique

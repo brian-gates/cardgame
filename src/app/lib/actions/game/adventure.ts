@@ -6,6 +6,6 @@ import { redirect } from "next/navigation";
 
 export async function adventure() {
   await startEncounter();
-  revalidatePath("/game/combat", "layout");
+  revalidatePath("/game/combat");
   redirect("/game/combat");
 }

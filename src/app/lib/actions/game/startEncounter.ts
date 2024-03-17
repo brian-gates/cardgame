@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { getSessionPlayer } from "../getSessionPlayer";
 import { Card } from "@prisma/client";
 import { shuffle } from "./shuffle";
+import { roll } from "../../roll";
 
 export async function startEncounter() {
   const { id } = (await getSessionPlayer()) ?? {};
@@ -21,8 +22,9 @@ export async function startEncounter() {
     });
   }
 
-  const encounter = await prisma.encounter.create({
+  await prisma.encounter.create({
     data: {
+      name: "Slimes",
       player: { connect: { id } },
       enemies: { create: [{ templateId: "slime" }, { templateId: "slime" }] },
     },
@@ -36,17 +38,19 @@ export async function startEncounter() {
 
   const { hand, draw } = drawRandomCards(deck, 5);
 
-  await prisma.card.updateMany({
-    where: { id: { in: hand.map((card) => card.id) } },
-    data: { location: "hand" },
-  });
+  if (hand.length) {
+    await prisma.card.updateMany({
+      where: { id: { in: hand.map((card) => card.id) } },
+      data: { location: "hand" },
+    });
+  }
 
-  await prisma.card.updateMany({
-    where: { id: { in: draw.map((card) => card.id) } },
-    data: { location: "draw" },
-  });
-
-  revalidatePath("/game");
+  if (draw.length) {
+    await prisma.card.updateMany({
+      where: { id: { in: draw.map((card) => card.id) } },
+      data: { location: "draw" },
+    });
+  }
 }
 
 function drawRandomCards(draw: Card[], amount: number) {
@@ -56,13 +60,9 @@ function drawRandomCards(draw: Card[], amount: number) {
 
   const hand = [];
   for (let i = 0; i < amount; i++) {
-    const randomIndex = getRandomNumber(drawCopy.length);
+    const randomIndex = roll(drawCopy.length);
     hand.push(drawCopy[randomIndex]);
     drawCopy.splice(randomIndex, 1); // Modify the copy instead of the original array
   }
   return { hand, draw: drawCopy };
-}
-
-function getRandomNumber(max: number) {
-  return Math.floor(Math.random() * max);
 }
